@@ -1,12 +1,12 @@
 from tkinter import *
-import Server
+import Server as SYS
 
-class JanelaInicial(Frame):
+class AbaConfig(Frame):
     def __init__(self, master=None):
         Frame.__init__(self, master)
         self.pack()
         self.createWidgets()
-
+        
     def createWidgets(self):
         #labels and entry fields
         Label(self, text="Máximo de Conexões:").grid(row=0)
@@ -40,13 +40,9 @@ class JanelaInicial(Frame):
         #buttons
         self.ok = Button(self)
         self.ok["text"] = "Iniciar servidor"
-        self.ok["command"] = self.start_server
+        self.ok["command"] = self.restart_server
         self.ok.grid(row=4)
 
-        self.QUIT = Button(self, text="SAIR", fg="red",
-                                            command=window.destroy)
-        self.QUIT.grid(row=4,column=1)
-        
 
     def validate_MaxC(self, P):
         try:
@@ -87,14 +83,9 @@ class JanelaInicial(Frame):
             self.eTime.insert(0,str(self.v_eTime))
             return False
             
-    def start_server(self):
+    def restart_server(self):
         self.validate_MaxC(self.eMaxC.get())
         self.validate_Porta(self.ePorta.get())
         self.validate_Time(self.eTime.get())
-        my_server= Server.Server(int(self.eMaxC.get()),int(self.ePorta.get()),int(self.eTime.get()),self.v_download.get())   
-
-window = Tk()
-window.geometry("400x200")
-window.title("Janela Inicial")
-app = JanelaInicial(master=window)
-app.mainloop()
+        print("\nRESTART SERVER\n Passar os parametros para a fun;ao restart server")
+       # my_server= SYS.Server(int(self.eMaxC.get()),int(self.ePorta.get()),int(self.eTime.get()),self.v_download.get())   

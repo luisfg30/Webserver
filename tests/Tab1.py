@@ -1,4 +1,8 @@
 from tkinter import *
+import sys
+sys.path.append('Webserver/Software')
+import JanelaInicial
+
 class Tabs(Frame):
 
 
