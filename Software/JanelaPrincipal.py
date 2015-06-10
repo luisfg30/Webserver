@@ -1,5 +1,7 @@
 from tkinter import *
-import AbaConfig as GUI
+import AbaConfig 
+import AbaConexao
+import AbaIndicadores
 
 class JanelaPrincipal(Frame):
 
@@ -14,9 +16,11 @@ class JanelaPrincipal(Frame):
         self.curtab = None
         self.tabs = {}
         frame1= Frame()
-        frame2=GUI.AbaConfig()
-        self.addTab("Conexões","#9999FF", "#4444FF",frame1)
-        self.addTab("Indicadores","#FF9999", "#FF4444",frame1)
+        frame2=AbaConfig.AbaConfig()
+        frame3=AbaConexao.AbaConexao()
+        frame4=AbaIndicadores.AbaIndicadores()
+        self.addTab("Conexões","#9999FF", "#4444FF",frame3)
+        self.addTab("Indicadores","#FF9999", "#FF4444",frame4)
         self.addTab("Coonsulta BD","#99FF99", "#44FF44",frame1)
         self.addTab("Configurações","#FFFF99", "#FFFF44",frame2)
         ####################
@@ -31,7 +35,7 @@ class JanelaPrincipal(Frame):
             btn.grid(row=0, column=tabslen, sticky=W+E)
 
             
-            #internal_frame= GUI.AbaConfig()
+            #internal_frame= Abaconfig.AbaConfig()
             internal_frame.grid(row=1, column=0, columnspan=4, rowspan=2, sticky=W+E+N+S, in_=self)
 
             tab['id']=tabslen
