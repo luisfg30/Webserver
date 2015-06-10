@@ -54,8 +54,5 @@ class JanelaPrincipal(Frame):
     
 
 
-root = Tk()
-root.geometry("750x500+100+100")
-t = JanelaPrincipal(root)
-root.mainloop()
+
 
