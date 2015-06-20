@@ -2,6 +2,7 @@ from tkinter import *
 import AbaConfig 
 import AbaConexao
 import AbaIndicadores
+import AbaBD
 
 class JanelaPrincipal(Frame):
 
@@ -15,7 +16,7 @@ class JanelaPrincipal(Frame):
         ####################
         self.curtab = None
         self.tabs = {}
-        frame1= Frame()
+        frame1= AbaBD.AbaBD()
         frame2=AbaConfig.AbaConfig()
         frame3=AbaConexao.AbaConexao()
         frame4=AbaIndicadores.AbaIndicadores()
