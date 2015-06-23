@@ -17,6 +17,14 @@ class AbaBD(Frame):
        list=["abc","def","ghi"]
        for i in range(50):
             self.tabela.insert_row(list)
+       
+       self.tabela.clear_table()     
+       
+       list3=["fuck","this","shit"]
+       for i in range(10):
+        self.tabela.insert_row(list3)
+        
+        
 
        
 

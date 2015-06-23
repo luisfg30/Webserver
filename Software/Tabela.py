@@ -29,7 +29,10 @@ class Tabela(Frame):
         vscrollbar.config(command=self.canvas.yview)
         hscrollbar.config(command=self.canvas.xview)
 
-
+        self.create_internal_frame()
+       
+        
+    def create_internal_frame(self):
         self.frame = Frame(self.canvas,bg="DarkGrey")
 
         new_row = []
@@ -44,8 +47,7 @@ class Tabela(Frame):
         self.canvas.create_window(0, 0, anchor=NW, window=self.frame)
         self.frame.update_idletasks()
         self.canvas.config(scrollregion=self.canvas.bbox("all"))
-        
-        
+     
     def set_cell(self, i, j, value):
         widget = self._widgets[i][j]
         widget.configure(text=value)
@@ -54,7 +56,14 @@ class Tabela(Frame):
         for j in range(len(values)):
             widget = self._widgets[i][j]
             widget.configure(text=values[j])   
-            
+    
+    def clear_table(self):
+        self._widgets.clear()
+        self.current_row=0
+        self.rows=0  
+        self.frame.destroy()
+        self.create_internal_frame()
+        
     def insert_row(self,values):
         self.current_row+=1
         self.rows+=1
@@ -67,3 +76,4 @@ class Tabela(Frame):
         self.canvas.create_window(0, 0, anchor=NW, window=self.frame)
         self.frame.update_idletasks()
         self.canvas.config(scrollregion=self.canvas.bbox("all"))
+        
