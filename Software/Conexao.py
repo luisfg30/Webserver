@@ -1,4 +1,5 @@
 import datetime 
+
 class Conexao(object):
 
     def __init__(self,porta,IP,download):
@@ -11,13 +12,13 @@ class Conexao(object):
         print("\nCONEXAO CRIADA\n Data:"+self.data+"\n Porta"+str(self.porta)+"\n IP:"+str(self.IP)+"\n Enable Download:"+str(self.download))    
 
     def get_data(self):
-        return data
+        return self.data
     
     def get_porta(self):
         return self.porta
         
     def get_IP(self):
-        return self.IP
+        return str(self.IP)
         
     def get_download(self):
         return self.download

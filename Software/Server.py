@@ -18,8 +18,11 @@ class Server(object):
         self.start_server()
 
     def test_method(self):
-         c=Conexao.Conexao(8000,"192.168.1.1",True)
-         self.listaConexoes.append(c)
+    
+         for i in range(0, 10):
+            c=Conexao.Conexao(8000,"192.168.1.%d" % i,True)
+            self.listaConexoes.append(c)
+            
          print("\n Lista de conexoes:")
          for i in range(len(self.listaConexoes)):
             print("\n " +self.listaConexoes[i].get_IP())  
@@ -34,12 +37,14 @@ class Server(object):
             self.listaConexoes.clear()
             #desse modo fica varios servers em paralelo O.0, tem que fechar o anterior
             self.start_server()
+            
     def set_parametros(self,maxConexoes,porta,timeOut,download):   
         self.maxConexoes=maxConexoes
         self.porta=porta
         self.timeOut=timeOut
         self.download=download
         print("\n PARAMETROS SERVER\n Max Conexoes:"+str(self.maxConexoes)+"\n Porta:"+str(self.porta)+"\n Time Out:"+str(self.timeOut)+"\n Enable Download:"+str(self.download))
+        
     def start_server(self):
         self.mt= mainThread(self.maxConexoes,self.porta,self.timeOut,self.download)
 
