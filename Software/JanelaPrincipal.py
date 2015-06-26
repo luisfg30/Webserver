@@ -3,13 +3,15 @@ import AbaConfig
 import AbaConexao
 import AbaIndicadores
 import AbaBD
+import Server
 
 class JanelaPrincipal(Frame):
 
 
-    def __init__(self, master):
+    def __init__(self, master,server):
+        
         super(JanelaPrincipal, self).__init__()
-
+        self.my_server=server
         self.master = master
         self.columnconfigure(10, weight=1)
         self.rowconfigure(3, weight=1)
@@ -17,7 +19,7 @@ class JanelaPrincipal(Frame):
         self.curtab = None
         self.tabs = {}
         frame1= AbaBD.AbaBD()
-        frame2=AbaConfig.AbaConfig()
+        frame2=AbaConfig.AbaConfig(None,self.my_server)
         frame3=AbaConexao.AbaConexao()
         frame4=AbaIndicadores.AbaIndicadores()
         self.addTab("Conexões","#9999FF", "#4444FF",frame3)

@@ -1,9 +1,10 @@
 from tkinter import *
-import Server as SYS
+import Server 
 
 class AbaConfig(Frame):
-    def __init__(self, master=None):
+    def __init__(self, master,server):
         Frame.__init__(self, master)
+        self.my_server=server
         self.pack()
         self.createWidgets()
         
@@ -39,7 +40,7 @@ class AbaConfig(Frame):
         
         #buttons
         self.ok = Button(self)
-        self.ok["text"] = "Iniciar servidor"
+        self.ok["text"] = "Reiniciar servidor"
         self.ok["command"] = self.restart_server
         self.ok.grid(row=4)
 
@@ -87,5 +88,6 @@ class AbaConfig(Frame):
         self.validate_MaxC(self.eMaxC.get())
         self.validate_Porta(self.ePorta.get())
         self.validate_Time(self.eTime.get())
-        print("\nRESTART SERVER\n Passar os parametros para a fun;ao restart server")
-       # my_server= SYS.Server(int(self.eMaxC.get()),int(self.ePorta.get()),int(self.eTime.get()),self.v_download.get())   
+        self.my_server.set_parametros(int(self.eMaxC.get()),int(self.ePorta.get()),int(self.eTime.get()),self.v_download.get())
+        self.my_server.restart_server()
+        

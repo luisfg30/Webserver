@@ -94,12 +94,12 @@ class JanelaInicial(Frame):
         self.validate_MaxC(self.eMaxC.get())
         self.validate_Porta(self.ePorta.get())
         self.validate_Time(self.eTime.get())
-        my_server= Server.Server(int(self.eMaxC.get()),int(self.ePorta.get()),int(self.eTime.get()),self.v_download.get())  
+        self.my_server= Server.Server(int(self.eMaxC.get()),int(self.ePorta.get()),int(self.eTime.get()),self.v_download.get())  
         self.master.destroy()
         master2=Tk()
         master2.geometry("750x500+100+100")
         master2.title("Janela Principal") 
-        j= JanelaPrincipal.JanelaPrincipal(master2)
+        j= JanelaPrincipal.JanelaPrincipal(master2,self.my_server)
         master2.mainloop()
 
     
