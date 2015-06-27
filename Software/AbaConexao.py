@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 import Server
+import time
 
 class AbaConexao(Frame):
     def __init__(self, master, server):
@@ -10,7 +11,9 @@ class AbaConexao(Frame):
         self.createWidgets()
         
     def createWidgets(self):
-        Label(self, text="     ").grid(row=0, column=0)
+        #Botão Atualizar
+        self.update = Button(self, text="Atualizar", command=self.updateList)
+        self.update.grid(row=0, column=1)
     
         Label(self, text="IP da conexão").grid(row=1, columnspan=3)
         
@@ -30,7 +33,6 @@ class AbaConexao(Frame):
         sList.grid(row=2, column=2, sticky=(N,S))
         self.conListBox['yscrollcommand'] = sList.set
                
-        self.updateList()
         
     def showConection(self, *args):
                     
@@ -39,7 +41,8 @@ class AbaConexao(Frame):
         current = self.conListBox.curselection()[0]
         
         self.conDetails.insert(INSERT, "IP: "+self.my_server.listaConexoes[current].get_IP()+" - Porta: "+str(self.my_server.listaConexoes[current].get_porta())+" - Data: "+self.my_server.listaConexoes[current].get_data())
-            
+        
+        
     def updateList(self):
     
         self.conListBox.delete(0, END)
