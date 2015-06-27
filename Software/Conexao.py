@@ -51,11 +51,12 @@ class Conexao(object):
         
     def print_self(self):
         print("\t Data= "+self.data+"\n\t IP de origem= "+str(self.IP)+":"+str(self.porta)) 
+        self.print_reqs()
     
     def print_reqs(self):
-        print("\n\t REQUISICOES:\n")
+        print("\n\t\t REQUISICOES:\n")
         for i in range(len(self.requisicoesRecebidas)):
-            print("\n\t["+str(i)+"] pagina: "+self.requisicoesRecebidas[i].get_pagina())
+            print("\n\t\t["+str(i)+"] pagina: "+self.requisicoesRecebidas[i].get_pagina())
         
     def nova_resposta(self,bytes,reqIndex,header,content):
         self.bytesEnviados+=bytesEnviados

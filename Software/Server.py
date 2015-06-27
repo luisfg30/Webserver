@@ -48,12 +48,13 @@ class Server(object):
             return -1
         else:    
             for i in range(len(self.listaConexoes)):
-                if self.listaConexoes[i].get_IP()==IP and self.listaConexoes[i].get_porta==porta and self.listaConexoes[i].get_data()==data:
+                if self.listaConexoes[i].get_IP()==IP :
                     return i# retorna o indice da conexao
                 else:
                     return -1 #retorna -1 se a conexao nao existe
     
     def print_conexoes(self):
+        print("\n CONEXOES: ")
         for i in range(len(self.listaConexoes)):
             print("\n ["+str(i)+"] ")
             self.listaConexoes[i].print_self()
