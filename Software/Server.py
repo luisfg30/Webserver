@@ -2,6 +2,7 @@ import Conexao
 import http.server
 import socketserver
 import threading
+import AcessoSGBD
 
 class Server(object):
 
@@ -11,11 +12,15 @@ class Server(object):
         self.timeOut=timeOut
         self.download=download
         self.listaConexoes=[]  
+        
+        self.my_AcessoSGBD=AcessoSGBD.AcessoSGBD()
+        
         #print apenas para mostrar que recebeu os parametros, depois a construtora ja inicia o servidor
         print("\nPARAMETROS SERVER\n Max Conexoes:"+str(self.maxConexoes)+"\n Porta:"+str(self.porta)+"\n Time Out:"+str(self.timeOut)+"\n Enable Download:"+str(self.download))  
         
         self.test_method()
         self.start_server()
+        self.save_server()
 
     def test_method(self):
     
@@ -47,7 +52,10 @@ class Server(object):
         
     def start_server(self):
         self.mt= mainThread(self.maxConexoes,self.porta,self.timeOut,self.download)
-
+        
+    def save_server(self):
+        self.my_AcessoSGBD.insertServer(self.porta,self.maxConexoes,self.download,self.timeOut)
+    
 class mainThread(threading.Thread):
     def __init__(self,maxConexoes,porta,timeOut,download):
         self.porta=porta
