@@ -31,8 +31,8 @@ class customServer(HTTPServer):
             
 class Server(object):
 
-    def __init__(self,maxConexoes,porta,timeOut,download):
-        self.hostname="192.168.100.12"
+    def __init__(self,maxConexoes,IP,porta,timeOut,download):
+        self.hostname=IP
         self.maxConexoes=maxConexoes
         self.porta=porta
         self.timeOut=timeOut
@@ -61,9 +61,19 @@ class Server(object):
     
     def get_porta(self):
         return self.porta
-    
+        
+    def get_maxConexoes(self):
+        return self.maxConexoes
+        
+    def get_download(self): 
+        return self.download
+        
+    def get_timeOut(self):
+        return self.timeOut
+        
     def get_hostname(self):
         return self.hostname
+        
     def get_conexao(self,index):
         return self.listaConexoes[index]
     
@@ -87,7 +97,8 @@ class Server(object):
             self.listaConexoes.clear()
             #desse modo fica varios servers em paralelo O.0, tem que fechar o anterior
             self.start_server()
-    def set_parametros(self,maxConexoes,porta,timeOut,download):   
+    def set_parametros(self,maxConexoes,ip,porta,timeOut,download):  
+        self.hostname=ip
         self.maxConexoes=maxConexoes
         self.porta=porta
         self.timeOut=timeOut
