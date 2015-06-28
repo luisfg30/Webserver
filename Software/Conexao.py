@@ -19,13 +19,26 @@ class Requisicao(object):
         self.hostname=hostname
         self.data=data
         self.respostas=[]
+    
     def nova_resposta(self,header,content):
         resp= Resposta(header,content)
         self.respostas.append(resp)
     
+    def get_tipo(self):
+        return self.tipo
+    
+    def get_protocolo(self):
+        return self.versaoProtocoloHTTP
+    
     def get_pagina(self):
         return self.paginaAcessada
+    
+    def get_data(self):
+        return self.data
         
+    def get_hostname(self):
+        return self.hostname
+    
     def get_resposta(self,index):
         return self.respostas[index]
         

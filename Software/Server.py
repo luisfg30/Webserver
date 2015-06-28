@@ -14,7 +14,7 @@ class HTTPParser(BaseHTTPRequestHandler):
             self.server.servidor.nova_conexao(self.client_address[0],self.client_address[1],self.date_time_string(None))
             self.server.servidor.nova_requisicao(len(self.server.servidor.get_lista())-1,len(str(self.headers)),self.command,self.path,self.request_version,self.server.servidor.get_hostname,self.date_time_string(None))
         else: #conexao ja existe
-            self.server.servidor.nova_requisicao(index,len(str(self.headers)),self.command,self.path,self.request_version,self.server.servidor.get_hostname,self.date_time_string(None))
+           self.server.servidor.nova_requisicao(index,len(str(self.headers)),self.command,self.path,self.request_version,self.server.servidor.get_hostname,self.date_time_string(None))
         
         self.send_response(200)
         self.send_header("Content-type", "text/html")
@@ -33,32 +33,33 @@ class customServer(HTTPServer):
 class Server(object):
 
     def __init__(self,maxConexoes,porta,timeOut,download):
-        self.hostname="localhost"
+        self.hostname="192.168.1.6"
         self.maxConexoes=maxConexoes
         self.porta=porta
         self.timeOut=timeOut
         self.download=download
         self.listaConexoes=[]
-        
+
         self.my_AcessoSGBD=AcessoSGBD.AcessoSGBD()
         
         #print apenas para mostrar que recebeu os parametros, depois a construtora ja inicia o servidor
         print("\nPARAMETROS SERVER\n Max Conexoes:"+str(self.maxConexoes)+"\n Porta:"+str(self.porta)+"\n Time Out:"+str(self.timeOut)+"\n Enable Download:"+str(self.download))  
         
-        self.save_server()
         self.start_server()
+        self.save_server()
         
     def procura_conexao(self,IP,porta,data):
         if len(self.listaConexoes)==0: #lista vazia
             return -1
         else:    
             for i in range(len(self.listaConexoes)):
-                if self.listaConexoes[i].get_IP()==IP and self.listaConexoes[i].get_porta==porta and self.listaConexoes[i].get_data()==data:
+                if self.listaConexoes[i].get_IP()==IP :
                     return i# retorna o indice da conexao
-                else:
-                    return -1 #retorna -1 se a conexao nao existe
+        
+        return -1 #retorna -1 se a conexao nao existe
     
     def print_conexoes(self):
+        print("\n CONEXOES: ")
         for i in range(len(self.listaConexoes)):
             print("\n ["+str(i)+"] ")
             self.listaConexoes[i].print_self()
@@ -91,20 +92,19 @@ class Server(object):
             self.listaConexoes.clear()
             #desse modo fica varios servers em paralelo O.0, tem que fechar o anterior
             self.start_server()
-            
     def set_parametros(self,maxConexoes,porta,timeOut,download):   
         self.maxConexoes=maxConexoes
         self.porta=porta
         self.timeOut=timeOut
         self.download=download
         print("\n PARAMETROS SERVER\n Max Conexoes:"+str(self.maxConexoes)+"\n Porta:"+str(self.porta)+"\n Time Out:"+str(self.timeOut)+"\n Enable Download:"+str(self.download))
-        
+    
     def start_server(self):
         self.mt= mainThread(self,self.maxConexoes,self.porta,self.timeOut,self.download)
-
+    
     def save_server(self):
         self.my_AcessoSGBD.insertServer(self.porta,self.maxConexoes,self.download,self.timeOut)
-        
+    
 class mainThread(threading.Thread):
     def __init__(self,servidor,maxConexoes,porta,timeOut,download):
         self.servidor=servidor
