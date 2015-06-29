@@ -1,33 +1,30 @@
 import datetime 
 
 class Resposta(object):
-    def __init__(self,header,content):
+    def __init__(self,header,contentSize):
         self.header=header
-        self.content=content
+        self.contentSize=contentSize
         
     def get_header(self):
         return self.header
      
-    def get_content(self):
-        return self.content
+    def get_contentSize(self):
+        return self.contentSize
 
 class Requisicao(object):
-    def __init__(self,tipo,paginaAcessada,versaoProtocoloHTTP,hostname,data):
+    def __init__(self,tipo,paginaAcessada,versaoProtocoloHTTP,hostname,data,resp):
         self.tipo=tipo
         self.paginaAcessada=paginaAcessada
         self.versaoProtocoloHTTP=versaoProtocoloHTTP
         self.hostname=hostname
         self.data=data
-        self.respostas=[]
-    def nova_resposta(self,header,content):
-        resp= Resposta(header,content)
-        self.respostas.append(resp)
+        self.resposta=resp
     
     def get_pagina(self):
         return self.paginaAcessada
         
-    def get_resposta(self,index):
-        return self.respostas[index]
+    def get_resposta(self):
+        return self.resposta
         
 class Conexao(object):
 
@@ -41,10 +38,10 @@ class Conexao(object):
         self.requisicoesRecebidas=[]
         self.paginasAcessadas=[]          
 
-    def nova_requisicao(self,bytes,tipo,paginaAcessada,versaoProtocoloHTTP,hostname,data):
+    def nova_requisicao(self,bytes,tipo,paginaAcessada,versaoProtocoloHTTP,hostname,data,resposta):
         self.bytesRecebidos+=bytes
         self.tempoInativo=0
-        req=Requisicao(tipo,paginaAcessada,versaoProtocoloHTTP,hostname,data)
+        req=Requisicao(tipo,paginaAcessada,versaoProtocoloHTTP,hostname,data,resposta)
         self.requisicoesRecebidas.append(req)
         self.print_reqs()
         self.paginasAcessadas.append(paginaAcessada)
@@ -57,11 +54,15 @@ class Conexao(object):
         print("\n\t\t REQUISICOES:\n")
         for i in range(len(self.requisicoesRecebidas)):
             print("\n\t\t["+str(i)+"] pagina: "+self.requisicoesRecebidas[i].get_pagina())
+            #print("\n\t\t  Resposta:\n"+str(self.requisicoesRecebidas[i].get_resposta().get_header()))
         
     def nova_resposta(self,bytes,reqIndex,header,content):
         self.bytesEnviados+=bytesEnviados
         self.requisicoesRecebidas[reqIndex].nova_resposta(header,content)
-        
+    
+    def get_requisicoes(self):
+        return self.requisicoesRecebidas
+     
     def get_data(self):
         return self.data
     
