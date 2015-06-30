@@ -1,7 +1,7 @@
 from tkinter import *
 import Server
 import JanelaPrincipal
-
+import re
 
 
 class JanelaInicial(Frame):
@@ -13,11 +13,13 @@ class JanelaInicial(Frame):
     def createWidgets(self):
         #labels and entry fields
         Label(self, text="Máximo de Conexões:").grid(row=0)
-        Label(self, text="Porta:").grid(row=1)
-        Label(self, text="Time Out(segundos):").grid(row=2)
+        Label(self,text="Endereço IP:").grid(row=1)
+        Label(self, text="Porta:").grid(row=2)
+        Label(self, text="Time Out(segundos):").grid(row=3)
  
         #default values
         self.v_eMaxC=500
+        self.v_IP="127.0.0.1"
         self.v_ePorta=8000
         self.v_eTime=300
         self.v_download=StringVar()
@@ -29,6 +31,8 @@ class JanelaInicial(Frame):
         
         self.eMaxC = Entry(self,validate='focus', validatecommand=(vcmd1, '%P'))
         self.eMaxC.insert(0,str(self.v_eMaxC))
+        self.eIP=Entry(self,validate='focus')
+        self.eIP.insert(0,self.v_IP)
         self.ePorta = Entry(self,validate='focus', validatecommand=(vcmd2, '%P'))
         self.ePorta.insert(0,str(self.v_ePorta))
         self.eTime = Entry(self,validate='focus', validatecommand=(vcmd3, '%P'))
@@ -36,19 +40,19 @@ class JanelaInicial(Frame):
         self.cDownload=Checkbutton(self,text="Habilitar Download",variable=self.v_download,onvalue="True",offvalue="False")
         
         self.eMaxC.grid(row=0, column=1)
-        self.ePorta.grid(row=1, column=1)
-        self.eTime.grid(row=2, column=1)
-        self.cDownload.grid(row=3, column=0)
+        self.eIP.grid(row=1,column=1)
+        self.ePorta.grid(row=2, column=1)
+        self.eTime.grid(row=3, column=1)
+        self.cDownload.grid(row=4, column=0)
         
         #buttons
         self.ok = Button(self)
         self.ok["text"] = "Iniciar servidor"
         self.ok["command"] = self.start_server
-        self.ok.grid(row=4)
+        self.ok.grid(row=5)
 
-        self.QUIT = Button(self, text="SAIR", fg="red",
-                                            command=self.master.destroy)
-        self.QUIT.grid(row=4,column=1)
+        self.QUIT = Button(self, text="SAIR", fg="red",command=self.master.destroy)
+        self.QUIT.grid(row=5,column=1)
         
 
     def validate_MaxC(self, P):
@@ -63,7 +67,8 @@ class JanelaInicial(Frame):
             self.eMaxC.delete(0,END)
             self.eMaxC.insert(0,str(self.v_eMaxC))
             return False
-     
+            
+
     def validate_Porta(self,P):
             try:
                     v=int(P)
@@ -94,12 +99,17 @@ class JanelaInicial(Frame):
         self.validate_MaxC(self.eMaxC.get())
         self.validate_Porta(self.ePorta.get())
         self.validate_Time(self.eTime.get())
-        self.my_server= Server.Server(int(self.eMaxC.get()),int(self.ePorta.get()),int(self.eTime.get()),self.v_download.get())  
-        self.master.destroy()
-        master2=Tk()
-        master2.geometry("750x500+100+100")
-        master2.title("Janela Principal") 
-        j= JanelaPrincipal.JanelaPrincipal(master2,self.my_server)
-        master2.mainloop()
+        ip=self.eIP.get()
+        if re.match(r'^((\d{1,2}|1\d{2}|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d{2}|2[0-4]\d|25[0-5])$', ip): 
+            self.my_server= Server.Server(int(self.eMaxC.get()),ip,int(self.ePorta.get()),int(self.eTime.get()),self.v_download.get())  
+            self.master.destroy()
+            master2=Tk()
+            master2.geometry("750x500+100+100")
+            master2.title("Janela Principal") 
+            j= JanelaPrincipal.JanelaPrincipal(master2,self.my_server)
+            master2.mainloop()
+        else:
+           self.eIP.delete(0,END)
+           self.eIP.insert(0,self.v_IP)
 
     
