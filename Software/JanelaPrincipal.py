@@ -18,9 +18,9 @@ class JanelaPrincipal(Frame):
         ####################
         self.curtab = None
         self.tabs = {}
-        frame1= AbaBD.AbaBD()
+        frame1=AbaBD.AbaBD()
         frame2=AbaConfig.AbaConfig(None,self.my_server)
-        frame3=AbaConexao.AbaConexao()
+        frame3=AbaConexao.AbaConexao(None, self.my_server)
         frame4=AbaIndicadores.AbaIndicadores()
         self.addTab("Conexões","#9999FF", "#4444FF",frame3)
         self.addTab("Indicadores","#FF9999", "#FF4444",frame4)

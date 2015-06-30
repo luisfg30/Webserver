@@ -7,7 +7,7 @@ class Tabela(Frame):
         Frame.__init__(self, master)
         self.table_height=table_height
         self.table_width=table_width
-        self.pack(side="top", fill="x")
+        #self.pack(side="top", fill="x")
         self.rows=0
         self.columns=len(value_names)
         self.value_names=value_names
