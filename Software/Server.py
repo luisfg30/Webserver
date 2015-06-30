@@ -2,10 +2,14 @@ import Conexao
 import threading
 import time
 from http.server import BaseHTTPRequestHandler, HTTPServer
+import socket
+import socketserver
 
 class HTTPParser(BaseHTTPRequestHandler):
 
     def do_GET(self):
+        message =  threading.currentThread().getName()
+        print("\n THREAD: "+message)
         print("\nServer recebeu do browser: \n"+self.requestline+"\n"+str(self.headers))
         
         if self.path=="/": #homepage
@@ -47,13 +51,14 @@ class HTTPParser(BaseHTTPRequestHandler):
             
         except IOError:
             self.send_error(404,'File Not Found: %s' % self.path)
-            status=" 404 Not Found\n"    
+            status=" 404 Not Found\n"   
+               
             
         respHeader=self.request_version+status+"Server: "+self.server_version+" "+self.sys_version+"\n"+self.date_time_string(None)+"\nContent-type: "+mimetype+"\nContent-Length:"+str(len(content))
         r=Conexao.Resposta(respHeader,len(content))    
         
         print("\n CLOSE CONNECTION: "+str(self.close_connection))
-        #self.close_connection       
+        #self.close_connection=False    
         
         print("\n SERVER RESPONDEU: \n"+respHeader)
         
@@ -71,10 +76,12 @@ class HTTPParser(BaseHTTPRequestHandler):
         self.server.servidor.print_conexoes()    
         
      
-class customServer(HTTPServer):
+class customServer(socketserver.ThreadingMixIn,HTTPServer):
         def __init__(self,servidor,server_address,parser):
             super(customServer,self).__init__(server_address,parser)
             self.servidor=servidor
+            self.request_queue_size=self.servidor.get_maxConexoes()
+            
             
 class Server(object):
 
