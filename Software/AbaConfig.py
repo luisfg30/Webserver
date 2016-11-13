@@ -46,13 +46,12 @@ class AbaConfig(Frame):
         
         #buttons
         self.ok = Button(self)
-        self.ok["text"] = "Iniciar servidor"
+        self.ok["text"] = "Reiniciar servidor"
         self.ok["command"] = self.restart_server
         self.ok.grid(row=5)
 
         self.QUIT = Button(self, text="SAIR", fg="red",command=self.master.destroy)
         self.QUIT.grid(row=5,column=1)
-
 
     def validate_MaxC(self, P):
         try:

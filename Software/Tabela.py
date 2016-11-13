@@ -1,13 +1,11 @@
-
-
 from tkinter import *
 
 class Tabela(Frame):
+
     def __init__(self, master,value_names,table_width,table_height):
         Frame.__init__(self, master)
         self.table_height=table_height
         self.table_width=table_width
-        self.pack(side="top", fill="x")
         self.rows=0
         self.columns=len(value_names)
         self.value_names=value_names
@@ -31,7 +29,6 @@ class Tabela(Frame):
 
         self.create_internal_frame()
        
-        
     def create_internal_frame(self):
         self.frame = Frame(self.canvas,bg="DarkGrey")
 

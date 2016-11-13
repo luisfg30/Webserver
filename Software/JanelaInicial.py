@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 import Server
 import JanelaPrincipal
 import re
@@ -103,8 +104,9 @@ class JanelaInicial(Frame):
         if re.match(r'^((\d{1,2}|1\d{2}|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d{2}|2[0-4]\d|25[0-5])$', ip): 
             self.my_server= Server.Server(int(self.eMaxC.get()),ip,int(self.ePorta.get()),int(self.eTime.get()),self.v_download.get())  
             self.master.destroy()
-            master2=Tk()
-            master2.geometry("750x500+100+100")
+            master2=customTK()
+            master2.set_server(self.my_server)
+            master2.geometry("900x550+100+100")
             master2.title("Janela Principal") 
             j= JanelaPrincipal.JanelaPrincipal(master2,self.my_server)
             master2.mainloop()
@@ -112,4 +114,18 @@ class JanelaInicial(Frame):
            self.eIP.delete(0,END)
            self.eIP.insert(0,self.v_IP)
 
+class customTK(Tk):
+    def __init__(self):
+        Tk.__init__(self)
+        self.protocol("WM_DELETE_WINDOW", self.on_exit)
+        self.my_server = None
+         
+    def on_exit(self):
+        if messagebox.askyesno("", "Você deseja salvar as informações deste Server no Banco de Dados?"):
+            #self.my_server.save_BD()
+            self.destroy()
+        else:
+            self.destroy()
     
+    def set_server(self, server):
+        self.my_server=server;

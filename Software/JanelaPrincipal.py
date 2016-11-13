@@ -2,7 +2,7 @@ from tkinter import *
 import AbaConfig 
 import AbaConexao
 import AbaIndicadores
-import AbaBD
+#import AbaBD
 import Server
 
 class JanelaPrincipal(Frame):
@@ -12,24 +12,31 @@ class JanelaPrincipal(Frame):
         
         super(JanelaPrincipal, self).__init__()
         self.my_server=server
+        self.my_server.set_JanelaPrincipal(self)
         self.master = master
         self.columnconfigure(10, weight=1)
         self.rowconfigure(3, weight=1)
         ####################
         self.curtab = None
         self.tabs = {}
-        frame1= AbaBD.AbaBD()
+        #frame1=AbaBD.AbaBD()
         frame2=AbaConfig.AbaConfig(None,self.my_server)
-        frame3=AbaConexao.AbaConexao()
-        frame4=AbaIndicadores.AbaIndicadores()
-        self.addTab("Conexões","#9999FF", "#4444FF",frame3)
-        self.addTab("Indicadores","#FF9999", "#FF4444",frame4)
-        self.addTab("Coonsulta BD","#99FF99", "#44FF44",frame1)
+        self.abaConexao=AbaConexao.AbaConexao(None, self.my_server)
+        self.abaIndicadores=AbaIndicadores.AbaIndicadores()
+        self.addTab("Conexões","#9999FF", "#4444FF",self.abaConexao)
+        self.addTab("Indicadores","#FF9999", "#FF4444",self.abaIndicadores)
+        #self.addTab("Coonsulta BD","#99FF99", "#44FF44",frame1)
         self.addTab("Configurações","#FFFF99", "#FFFF44",frame2)
         ####################
 
         self.pack(fill=BOTH, expand=1, padx=5, pady=5)
-
+    
+    def get_abaConexao(self):
+        return self.abaConexao
+    
+    def get_abaIndicadores(self):
+        return self.abaIndicadores
+    
     def addTab(self, name, color, activeColor,internal_frame):
         tabslen = len(self.tabs)
         if tabslen < 10:
@@ -56,10 +63,3 @@ class JanelaPrincipal(Frame):
             self.tabs[tabid]['txtbx'].lift(self)
             self.tabs[self.curtab]['txtbx'].lower(self)
         self.curtab = tabid
-        #print("curtab: "+str(self.curtab))
-        
-    
-
-
-
-

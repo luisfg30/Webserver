@@ -1,54 +1,76 @@
 from tkinter import *
 from tkinter import ttk
 import Server
-from random import randint
+import Tabela
 
 class AbaConexao(Frame):
-    def __init__(self, master=None):
+    def __init__(self, master, server):
         Frame.__init__(self, master)
+        self.my_server=server
         self.pack()
         self.createWidgets()
+        self.createTable()
+        
         
     def createWidgets(self):
+            
+        Label(self, text="IP da conexão").grid(row=2, columnspan=3)
+        
+        Label(self, text="Requisições recebidas").grid(row=2, column=4)
+        
         Label(self, text="     ").grid(row=0, column=0)
-    
-        Label(self, text="IP da conexão").grid(row=1, columnspan=3)
+        Label(self, text="     ").grid(row=1, column=3)
         
-        Label(self, text="Requisições realizadas").grid(row=1, column=4)
+        self.conDetails = Text(self, width=70, height=2)
+        self.conDetails.grid(row=1, column=4)
         
-        Label(self, text="               ").grid(row=1, column=3)
-        
-        self.conInfo = Text(self, width=60)
-        self.conInfo.grid(row=2, column=4, sticky=(S+N+E+W))
-        
-        sInfo = ttk.Scrollbar(self, orient=VERTICAL, command=self.conInfo.yview)
-        sInfo.grid(column=5, row=2, sticky=(N,S))
-        self.conInfo['yscrollcommand'] = sInfo.set
-        
-        self.conListBox = Listbox(self, height=25)
-        self.conListBox.grid(row=2, column=1, sticky=(N,S,W,E))
+        self.conListBox = Listbox(self, height=23)
+        self.conListBox.grid(row=3, column=1, sticky=(N,S,W,E))
         self.conListBox.bind('<<ListboxSelect>>', self.showConection)
-        self.current = self.conListBox.curselection()        
+        self.current = self.conListBox.curselection()    
         
         sList = ttk.Scrollbar(self, orient=VERTICAL, command=self.conListBox.yview)
-        sList.grid(row=2, column=2, sticky=(N,S))
+        sList.grid(row=3, column=2, sticky=(N,S))
         self.conListBox['yscrollcommand'] = sList.set
-        
-        for i in range(1,100):
-            self.conListBox.insert('end', '192.168.100.%03d' % i)
-        
+               
         
     def showConection(self, *args):
         
-        print(self.conListBox.curselection()[0])
+        self.conDetails.delete(1.0, END)
+        
+        current = self.conListBox.curselection()[0]
+        
+        self.conDetails.insert(INSERT, "IP: "+self.my_server.listaConexoes[current].get_IP()+" - Porta: "+str(self.my_server.listaConexoes[current].get_porta())+" - Data: "+self.my_server.listaConexoes[current].get_data())
+        self.conDetails.insert(INSERT,"\nBytes Recebidos: "+str(self.my_server.listaConexoes[current].get_bytesRecebidos())+" - Bytes Enviados: "+str(self.my_server.listaConexoes[current].get_bytesEnviados()))
+        self.updateTable()
+        
+    def updateList(self):
+    
+        self.conListBox.delete(0, END)
+        
+        for i in range(len(self.my_server.listaConexoes)):
+            self.conListBox.insert('end', self.my_server.listaConexoes[i].get_IP())
+    
+        self.showConection
+    
+    def createTable(self):
+        
+        columns=[" ","Tipo","Versão do HTTP","Pagina","   Hostname   ","         Data         "]
+        
+        self.tabela=Tabela.Tabela(self,columns,650,350)
+        self.tabela.grid(row=3, column=4)
+    
+    def updateTable(self):
+        
+        self.tabela.clear_table()
+        
+        current = self.conListBox.curselection()[0]
+        
+        for i in range(len(self.my_server.listaConexoes[current].requisicoesRecebidas)):
+            row = [str(i),self.my_server.listaConexoes[current].requisicoesRecebidas[i].get_tipo(),
+                   self.my_server.listaConexoes[current].requisicoesRecebidas[i].get_protocolo(),
+                   self.my_server.listaConexoes[current].requisicoesRecebidas[i].get_pagina(),
+                   self.my_server.listaConexoes[current].requisicoesRecebidas[i].get_hostname(),
+                   self.my_server.listaConexoes[current].requisicoesRecebidas[i].get_data()]
             
-        self.conInfo.delete(1.0, END)
-        
-        quantReq = randint(1,10)
-        
-        for x in range(1, quantReq):
-            self.conInfo.insert(INSERT, "Requisicao %d\n\nData: %d:%d\nHora: %d:%d:%d\nBytes Enviados: %d\n\n\n" % (x, randint(0,23), randint(0,59), randint(1,30), randint(1,12), randint(2014,2015), randint(0,99999)))
-    
-    
-    
-    
+            self.tabela.insert_row(row)
